@@ -18,12 +18,12 @@ return new class extends Migration
             $table->id('book_id');
             $table->string('author', 32);
             $table->string('title', 150);
-            $table->integer('pieces')->default(10);
             $table->timestamps();
         });
 
         Book::create(['author'=>'Cooleen Hoovel', 'title'=>'It ends with us']);
-        Book::create(['author'=>'Lovecraft', 'title'=>'The call of Cthulhul', 'pieces'=>120]);
+        Book::create(['author'=>'Lovecraft', 'title'=>'The call of Cthulhul']);
+        Book::create(['author'=>'Some Guy', 'title'=>'The maze']);
     }
 
     /**

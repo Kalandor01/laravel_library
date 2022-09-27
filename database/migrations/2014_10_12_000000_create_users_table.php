@@ -15,15 +15,17 @@ return new class extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->id('user_id');
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();
         });
 
-        User::create(['name'=>'Gizi', 'email'=>'diak1@gmail.com']);
+        User::create(['name'=>'Library', 'email'=>'library@gmail.com']);
         User::create(['name'=>'Szilárd', 'email'=>'diak2@gmail.com']);
+        User::create(['name'=>'person', 'email'=>'example@email.ex']);
+        User::create(['name'=>'Gizi', 'email'=>'diak1@gmail.com']);
     }
 
     /**
