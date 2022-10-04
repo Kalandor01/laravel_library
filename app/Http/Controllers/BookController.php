@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
-    public function showAll()
+    public function index()
     {
         $books = response()->json(Book::all());
         return $books;
@@ -20,15 +20,13 @@ class BookController extends Controller
     public function destroy($id)
     {
         Book::find($id)->delete();
-        return redirect('/book/list');
     }
-    public function make(Request $request)
+    public function store(Request $request)
     {
         $book = new Book();
         $book->author = $request->author;
         $book->title = $request->title;
         $book->save();
-        return redirect('/book/list');
     }
     public function update(Request $request, $id)
     {
@@ -36,7 +34,6 @@ class BookController extends Controller
         $book->author = $request->author;
         $book->title = $request->title;
         $book->save();
-        return redirect('/book/list');
     }
     public function newView()
     {

@@ -11,7 +11,9 @@ class VerifyCsrfToken extends Middleware
      *
      * @var array<int, string>
      */
+    // testing blacklist
     protected $except = [
-        //
+        '/api/copies',
+        '/api/copies/*',
     ];
 }

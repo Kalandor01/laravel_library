@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function showAll()
+    public function index()
     {
         $users = response()->json(User::all());
         return $users;
@@ -20,23 +21,31 @@ class UserController extends Controller
     public function destroy($id)
     {
         User::find($id)->delete();
-        return redirect('/user/list');
     }
-    public function make(Request $request)
+    public function store(Request $request)
     {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'permission' => ['required', 'integer']
+        ]);
+
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->permission = 1;
         $user->save();
-        return redirect('/user/list');
     }
     public function update(Request $request, $id)
     {
         $user = User::find($id);
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->permission = $request->permission;
         $user->save();
-        return redirect('/user/list');
     }
     public function newView()
     {

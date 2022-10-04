@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class CopyController extends Controller
 {
-    public function showAll()
+    public function index()
     {
         $copys = response()->json(Copy::all());
         return $copys;
@@ -22,25 +22,23 @@ class CopyController extends Controller
     public function destroy($id)
     {
         Copy::find($id)->delete();
-        return redirect('/copy/list');
     }
-    public function make(Request $request)
+    public function store(Request $request)
     {
         $task = new Copy();
-        $task->user_id = $request->user_id;
+        $task->user_id = 1;
         $task->book_id = $request->book_id;
-        $task->status = $request->status;
+        $task->status = 0;
         $task->save();
-        return redirect('/copy/list');
     }
-    public function update(Request $request, $id)
+    public function update(Request $request, $copy_id)
     {
-        $task = Copy::find($id);
-        $task->user_id = $request->user_id;
-        $task->book_id = $request->book_id;
-        $task->status = $request->status;
-        $task->save();
-        return redirect('/copy/list');
+        $copy = Copy::find($copy_id);
+        // if($copy->user_id != 1)
+        $copy->user_id = $request->user_id;
+        $copy->book_id = $request->book_id;
+        $copy->status = $request->status;
+        $copy->save();
     }
     public function newView()
     {

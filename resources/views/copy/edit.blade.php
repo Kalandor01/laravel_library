@@ -1,7 +1,8 @@
 
 <form action="/api/copies/{{$copy->copy_id}}" method="post">
     {{csrf_field()}}
-    {{method_field('PUT')}}
+    {{method_field('PATCH')}}
+    <p>book_id: {{$copy->book_id}}</p>
     <!-- return redirect('/copy/list'); -->
     <select name="user_id" placeholder="User Id">
         @foreach ($users as $user)
