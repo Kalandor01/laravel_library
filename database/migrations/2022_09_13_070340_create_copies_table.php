@@ -18,6 +18,8 @@ return new class extends Migration
             $table->id('copy_id');
             $table->foreignId('user_id')->references('user_id')->on('users');
             $table->foreignId('book_id')->references('book_id')->on('books');
+            $table->boolean('hardcovered')->default(1);
+            $table->year('publication')->default(now()->year);
             $table->integer('status')->default(0);
             $table->timestamps();
         });
