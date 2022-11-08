@@ -9,6 +9,8 @@ class Lending extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'lending_id';
+
     protected $fillable = [
         'user_id',
         'copy_id',

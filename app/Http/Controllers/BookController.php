@@ -49,4 +49,10 @@ class BookController extends Controller
         $books = Book::all();
         return view("book.list", ["books"=>$books]);
     }
+
+    public function copies_id($id)
+    {
+        $copies = Book::with("book_copy")->where("book_id", $id)->get();
+        return $copies;
+    }
 }
