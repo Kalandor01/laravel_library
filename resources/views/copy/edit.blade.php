@@ -1,33 +1,18 @@
-
 <form action="/api/copies/{{$copy->copy_id}}" method="post">
-    {{csrf_field()}}
+    @csrf
     {{method_field('PATCH')}}
-    <p>book_id: {{$copy->book_id}}</p>
-    <!-- return redirect('/copy/list'); -->
-    <select name="user_id" placeholder="User Id">
-        @foreach ($users as $user)
-            <option value="{{$user->user_id}}"
-            {{$user->user_id == $copy->user_id ? 'selected': ''}}
-            >{{$user->name}}</option>
-        @endforeach
+    <!-- a name fontos, hogy a mező neve legyen! -->
+    <p>Book_id: {{$copy->book_id}}</p>
+    <!-- ha a könyvtárban van -->
+    <select name="hardcovered">
+        <option value=0>Puha kötésű</option>
+        <option value=1>Kemény kötésű</option>
     </select>
-    <select name="book_id" placeholder="Book Id">
-        @foreach ($books as $book)
-            <option value="{{$book->book_id}}"
-            {{$book->book_id == $copy->book_id ? 'selected': ''}}
-            >{{$book->title}}</option>
-        @endforeach
+    <label for="publication">Publikáció éve</label>
+    <input type="number" min="1300" max="2099" step="1" value="2000" name="publication" id="publication">
+    <select name="status">
+        <option value=0>Könyvtárban van</option>
+        <option value=1>Selejtezésre ítélve</option>
     </select>
-    <select name="status" placeholder="Status">
-        <option value=2
-        <?php echo $copy->status == 2 ? 'selected' : ''?>
-        >Selejtezendő</option>
-        <option value=1
-        <?php echo $copy->status == 1 ? 'selected' : ''?>
-        >Kikölcsönzött</option>
-        <option value=0
-        <?php echo $copy->status == 0 ? 'selected' : ''?>
-        >Kikölcsönözhető</option>
-    </select>
-    <input type="submit" value="ok">
+    <input type="submit" value="Ok">
 </form>

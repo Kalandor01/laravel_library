@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Copy;
 use App\Models\Book;
+use App\Models\Copy;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class CopyController extends Controller
 {
-    public function index()
-    {
-        $copys = response()->json(Copy::all());
-        return $copys;
+    //
+    public function index(){
+        $copies =  Copy::all();
+        return $copies;
     }
+    
     public function show($id)
     {
-        $copy = response()->json(Copy::find($id));
-        return $copy;
+        $copies = Copy::find($id);
+        return $copies;
     }
     public function destroy($id)
     {
@@ -25,38 +26,50 @@ class CopyController extends Controller
     }
     public function store(Request $request)
     {
-        $task = new Copy();
-        $task->user_id = 1;
-        $task->book_id = $request->book_id;
-        $task->status = 0;
-        $task->save();
-    }
-    public function update(Request $request, $copy_id)
-    {
-        $copy = Copy::find($copy_id);
-        // if($copy->user_id != 1)
-        $copy->user_id = $request->user_id;
+        $copy = new Copy();
         $copy->book_id = $request->book_id;
-        $copy->status = $request->status;
-        $copy->save();
+        $copy->hardcovered = $request->hardcovered;
+        $copy->publication = $request->publication;
+        $copy->status = 0;
+        $copy->save(); 
     }
+
+    public function update(Request $request, $id)
+    {
+        //a book_id ne változzon! mert akkor már másik példányról van szó
+        $copy = Copy::find($id);
+        $copy->hardcovered = $request->hardcovered;
+        $copy->publication = $request->publication;
+        $copy->status = $request->status;
+        $copy->save();        
+    }
+
+    public function copies_pieces($title)
+    {	
+        $copies = Book::with('copy_c')->where('title','=', $title)->count();
+        return $copies;
+    }
+
+    //view-k:
+
     public function newView()
     {
-        $users = User::all();
+        //új rekord(ok) rögzítése
         $books = Book::all();
-        return view("copy.new", ["users"=>$users, "books"=>$books]);
+        return view('copy.new', ['books' => $books]);
     }
+
     public function editView($id)
     {
-        $users = User::all();
         $books = Book::all();
         $copy = Copy::find($id);
-        return view("copy.edit", ["users"=>$users, "books"=>$books, "copy"=>$copy]);
+        return view('copy.edit', ['books' => $books, 'copy' => $copy]);
     }
+
     public function listView()
     {
         $copies = Copy::all();
-        $books = Book::all();
-        return view("copy.list", ["copies"=>$copies, "books"=>$books]);
+        //copy mappában list blade
+        return view('copy.list', ['copies' => $copies]);
     }
 }

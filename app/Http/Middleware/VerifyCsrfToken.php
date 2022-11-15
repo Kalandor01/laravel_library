@@ -11,9 +11,16 @@ class VerifyCsrfToken extends Middleware
      *
      * @var array<int, string>
      */
-    // testing blacklist
+    //unit tesztek kedvéért állítom be
     protected $except = [
         '/api/copies',
         '/api/copies/*',
+        '/api/users',
+        '/api/users/*',
+        '/api/books',
+        '/api/books/*',
+        '/api/users/password/*',
+        'api/lendings',
+        'api/lendings/*/*/*'
     ];
 }

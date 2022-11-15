@@ -7,14 +7,14 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
-    public function index()
-    {
-        $books = response()->json(Book::all());
+    public function index(){
+        $books =  Book::all();
         return $books;
     }
+    
     public function show($id)
     {
-        $book = response()->json(Book::find($id));
+        $book = Book::find($id);
         return $book;
     }
     public function destroy($id)
@@ -23,36 +23,22 @@ class BookController extends Controller
     }
     public function store(Request $request)
     {
-        $book = new Book();
-        $book->author = $request->author;
-        $book->title = $request->title;
-        $book->save();
-    }
-    public function update(Request $request, $id)
-    {
-        $book = Book::find($id);
-        $book->author = $request->author;
-        $book->title = $request->title;
-        $book->save();
-    }
-    public function newView()
-    {
-        return view("book.new", []);
-    }
-    public function editView($id)
-    {
-        $book = Book::find($id);
-        return view("book.edit", ["book"=>$book]);
-    }
-    public function listView()
-    {
-        $books = Book::all();
-        return view("book.list", ["books"=>$books]);
+        $Book = new Book();
+        $Book->author = $request->author;
+        $Book->title = $request->title;
+        $Book->save();
     }
 
-    public function copies_id($id)
+    public function update(Request $request, $id)
     {
-        $copies = Book::with("book_copy")->where("book_id", $id)->get();
+        $Book = Book::find($id);
+        $Book->author = $request->author;
+        $Book->title = $request->title;
+    }
+
+    public function bookCopies($title)
+    {	
+        $copies = Book::with('copy_c')->where('title','=', $title)->get();
         return $copies;
     }
 }

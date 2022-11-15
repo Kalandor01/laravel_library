@@ -16,21 +16,21 @@ return new class extends Migration
     {
         Schema::create('copies', function (Blueprint $table) {
             $table->id('copy_id');
-            $table->foreignId('user_id')->references('user_id')->on('users');
+            //melyik könyv példánya
             $table->foreignId('book_id')->references('book_id')->on('books');
-            $table->boolean('hardcovered')->default(1);
-            $table->year('publication')->default(now()->year);
+            //kemény: 1 vagy puha kötésű: 0; tinyInteger ugyanaz
+            $table->boolean('hardcovered')->default(0);
+            $table->year('publication')->default(2000);
+            //alapból a könyvtárban (0), ki van adva: 1, selejtre ítélve: 2
             $table->integer('status')->default(0);
             $table->timestamps();
         });
 
-        Copy::create(['user_id'=>1, 'book_id'=>1]);
-        Copy::create(['user_id'=>1, 'book_id'=>2, 'status'=>1]);
-        Copy::create(['user_id'=>1, 'book_id'=>3]);
-        Copy::create(['user_id'=>2, 'book_id'=>1]);
-        Copy::create(['user_id'=>2, 'book_id'=>2, 'status'=>2]);
-        Copy::create(['user_id'=>3, 'book_id'=>3]);
-        Copy::create(['user_id'=>3, 'book_id'=>2]);
+        Copy::create(['book_id'=>2, 'publication' =>1996, 'status'=>1]);
+        Copy::create(['book_id'=>3, 'status'=>1]);
+        Copy::create(['book_id'=>3]);
+        Copy::create(['book_id'=>3, 'hardcovered'=> 1]);
+        Copy::create(['book_id'=>3, 'status'=>2]);
     }
 
     /**

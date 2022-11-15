@@ -15,15 +15,20 @@ return new class extends Migration
     public function up()
     {
         Schema::create('books', function (Blueprint $table) {
+            //primary key beállítása
+            //egyik megoldás
             $table->id('book_id');
+            //másik megoldás
+            /* $table->bigIncrements('book_id'); */
             $table->string('author', 32);
-            $table->string('title', 150);
+            $table->longText('title', 150);
             $table->timestamps();
         });
 
-        Book::create(['author'=>'Cooleen Hoovel', 'title'=>'It ends with us']);
-        Book::create(['author'=>'Lovecraft', 'title'=>'The call of Cthulhul']);
-        Book::create(['author'=>'Some Guy', 'title'=>'The maze']);
+        //rekordok ide kerülnek; a számozás 1-gyel kezdődik
+        Book::create(['author'=>'Bohumil Hrabal', 'title'=>'Gyengéd barbárok']);
+        Book::create(['author'=>'J.R.R.Tolkien', 'title'=>'Hobbit']);
+        Book::create(['author'=>'Kaczur Sándor', 'title'=>'Programozás Java nyelven']);
     }
 
     /**

@@ -9,15 +9,13 @@ class Book extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'book_id';
+    protected  $primaryKey = 'book_id';
+
+    public function copy_c()
+    {    return $this->hasMany(Copy::class, 'book_id', 'book_id');   }
 
     protected $fillable = [
         'author',
-        'title',
+        'title'
     ];
-
-    public function book_copy()
-    {
-        return $this->hasMany(Copy::class, 'book_id', 'book_id');
-    }
 }

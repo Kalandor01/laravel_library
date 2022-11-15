@@ -1,16 +1,14 @@
-
-<h1>Példányok száma: {{$copies->count()}}</h1>
-<h3>Kikölcsönözhető példányok száma: {{$copies->where('status', 0)->count()}}</h3>
-<h3>Kikölcsönzött példányok száma: {{$copies->where('status', 1)->count()}}</h3>
-<h3>Selejtezendő példányok száma: {{$copies->where('status', 2)->count()}}</h3>
+<h1>A példányok száma: {{$copies->count()}}</h1>
+<h2>A kikölcsönözhető példányok száma: {{$copies->where('status', '0')->count()}}</h2>
+<h2>A selejtezendő példányok száma: {{$copies->where('status', '2')->count()}}</h2>
 @foreach ($copies as $copy)
-    @if($copy->status != 2)
+    @if ($copy->status !=2)
         <form action="/api/copies/{{$copy->copy_id}}" method="post">
-            {{csrf_field()}}
+            @csrf
             {{method_field('GET')}}
-            <div class="form-group">
+            <div>
                 <input type="submit" value="{{$copy->copy_id}}">
             </div>
         </form>
     @endif
-@endforeach
+@endforeach 

@@ -8,14 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Copy extends Model
 {
     use HasFactory;
-
-    protected $primaryKey = 'copy_id';
+    //nem id nevet adtuk a primary key-nek, ezért beállítjuk
+    protected  $primaryKey = 'copy_id';
 
     protected $fillable = [
-        'user_id',
         'book_id',
         'hardcovered',
         'publication',
-        'status',
+        'status'
     ];
 }

@@ -10,14 +10,14 @@ use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
-    public function index()
-    {
-        $users = response()->json(User::all());
+    public function index(){
+        $users =  User::all();
         return $users;
     }
+    
     public function show($id)
     {
-        $user = response()->json(User::find($id));
+        $user = User::find($id);
         return $user;
     }
     public function destroy($id)
@@ -26,62 +26,65 @@ class UserController extends Controller
     }
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email'],
-            'password' => ['required', 'confirmed', Password::defaults()],
-            'permission' => ['required', 'integer']
-        ]);
-
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
+        $validator = Validator::make($request->all(), [
+            'password' => [ 'required', 'string', 
+                Password::min(8) 
+                ->mixedCase() 
+                ->numbers() 
+                ->symbols() 
+                /* ->uncompromised(), 
+                'confirmed' */
+            ],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(["message" => $validator->errors()->all()], 400);
+        }
+        //ha nem tért vissza hibával, jó lesz a jelszó, de titkosítjuk is...
         $user->password = Hash::make($request->password);
         $user->permission = 1;
         $user->save();
     }
+
     public function update(Request $request, $id)
     {
         $user = User::find($id);
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->password = Hash::make($request->password);
+        //$user->password = Hash::make($request->password);
         $user->permission = $request->permission;
-        $user->save();
-    }
-    public function newView()
-    {
-        return view("user.new", []);
-    }
-    public function editView($id)
-    {
-        $user = User::find($id);
-        return view("user.edit", ["user"=>$user]);
-    }
-    public function listView()
-    {
-        $users = User::all();
-        return view("user.list", ["users"=>$users]);
+        $User->save();
+
     }
 
     public function updatePassword(Request $request, $id)
     {
+
+        /* $validator = Validator::make($request->all(), [
+            "password" => array( 'string', 'required', 'regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[^\s]{8,}$/u')
+        ]); */ //működik!!
         $validator = Validator::make($request->all(), [
             'password' => [ 'required', 'string', 
-            Password::min(8) 
-            ->mixedCase() 
-            ->numbers() 
-            ->symbols() 
-            ->uncompromised(), 
-            'confirmed' ],
-        ]);            
+                Password::min(8) 
+                ->mixedCase() 
+                ->numbers() 
+                ->symbols() 
+                /* ->uncompromised(), 
+                'confirmed' */
+            ],
+        ]);
+
         if ($validator->fails()) {
             return response()->json(["message" => $validator->errors()->all()], 400);
         }
+
         $user = User::where("id", $id)->update([
             "password" => Hash::make($request->password),
         ]);
+
         return response()->json(["user" => $user]);
     }
-
 }

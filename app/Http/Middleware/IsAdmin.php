@@ -15,13 +15,12 @@ class IsAdmin
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-        if (Auth::user() && Auth::user()->permission == 0)
-        {
-            return $next($request);
-        }
-        return redirect('home')->with('error','You don\'t have admin access');
+        //bejelentkezett felhasználó: Auth::user()
+        if (Auth::user() && Auth::user()->permission == 0) { 
+            return $next($request); 
+        } 
+        return redirect('dashboard')->with('error','You have not admin access');
     }
-
 }
