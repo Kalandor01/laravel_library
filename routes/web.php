@@ -28,8 +28,9 @@ Route::get('/dashboard', function () {
 //ADMIN
 Route::middleware( ['admin'])->group(function () {
     //books
-    Route::get('/api/books/{id}', [BookController::class, 'show']);
+    Route::get('/api/books', [BookController::class, 'index']);
     Route::post('/api/books', [BookController::class, 'store']);
+    Route::get('/api/books/{id}', [BookController::class, 'show']);
     Route::put('/api/books/{id}', [BookController::class, 'update']);
     Route::delete('/api/books/{id}', [BookController::class, 'destroy']);
     //copies
@@ -39,19 +40,24 @@ Route::middleware( ['admin'])->group(function () {
     //view - copy
     Route::get('/copy/new', [CopyController::class, 'newView']);
     Route::get('/copy/edit/{id}', [CopyController::class, 'editView']);
-    Route::get('/copy/list', [CopyController::class, 'listView']); 
+    Route::get('/copy/list', [CopyController::class, 'listView']);
+    Route::get('/api/book_copy_count/{title}', [CopyController::class, 'bookCopyCount']);
+    Route::get('/api/hard_books/{isHard}', [BookController::class, 'hardBooks']);
+    Route::get('/api/books_published_in/{year}', [BookController::class, 'booksPublishedIn']);
 });
 
 //SIMPLE USER
 Route::middleware(['auth.basic'])->group(function () {
-    
+    // Route::get('/api/books', [BookController::class, 'index']);
     //user   
     Route::apiResource('/api/users', UserController::class);
     Route::patch('/api/users/password/{id}', [UserController::class, 'updatePassword']);
     //queries
     //user lendings
     Route::get('/api/user_lendings', [LendingController::class, 'userLendingsList']);
+    Route::get('/api/user_lendings_extra', [LendingController::class, 'userLendingsListExtra']);
     Route::get('/api/user_lendings_count', [LendingController::class, 'userLendingsCount']);
+    Route::get('/api/user_lendings_count_extra', [LendingController::class, 'userLendingsCountExtra']);
 });
 //csak a tesztelés miatt van "kint"
 Route::patch('/api/users/password/{id}', [UserController::class, 'updatePassword']);

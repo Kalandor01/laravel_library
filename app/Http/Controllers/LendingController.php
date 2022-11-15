@@ -47,14 +47,38 @@ class LendingController extends Controller
     public function userLendingsList()
     {
         $user = Auth::user();	//bejelentkezett felhasználó
-        $lendings = Lending::with('user_c')->where('user_id','=', $user->id)->get();
+        $lendings = Lending::with('user_c')
+        ->where('user_id','=', $user->id)
+        ->get();
         return $lendings;
     }
 
     public function userLendingsCount()
     {
-        $user = Auth::user();	//bejelentkezett felhasználó
-        $lendings = Lending::with('user_c')->where('user_id','=', $user->id)->distinct('copy_id')->count();
+        $user = Auth::user();
+        $lendings = Lending::with('user_c')
+        ->where('user_id','=', $user->id)
+        ->count();
+        return $lendings;
+    }
+
+    public function userLendingsListExtra()
+    {
+        $user = Auth::user();
+        $lendings = Lending::with('user_c')
+        ->with('copy_c')
+        ->where('user_id','=', $user->id)
+        ->get();
+        return $lendings;
+    }
+
+    public function userLendingsCountExtra()
+    {
+        $user = Auth::user();
+        $lendings = Lending::with('user_c')
+        ->where('user_id','=', $user->id)
+        ->distinct('copy_id')
+        ->count();
         return $lendings;
     }
 

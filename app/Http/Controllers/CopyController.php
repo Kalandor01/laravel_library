@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Models\Copy;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CopyController extends Controller
 {
@@ -17,8 +18,8 @@ class CopyController extends Controller
     
     public function show($id)
     {
-        $copies = Copy::find($id);
-        return $copies;
+        $copy = Copy::find($id);
+        return $copy;
     }
     public function destroy($id)
     {
@@ -71,5 +72,13 @@ class CopyController extends Controller
         $copies = Copy::all();
         //copy mappában list blade
         return view('copy.list', ['copies' => $copies]);
+    }
+
+    public function bookCopyCount($title){
+        $copies = DB::table('copies as c')	//egy tábla lehet csak
+        ->join('books as b' ,'c.book_id','=','b.book_id') //kapcsolat leírása, akár több join is lehet
+        ->where('b.title','=', $title) 	//esetleges szűrés
+        ->count();				//esetleges aggregálás; ha select, akkor get() a vége
+        return $copies;
     }
 }
