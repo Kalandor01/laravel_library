@@ -53,15 +53,6 @@ class LendingController extends Controller
         return $lendings;
     }
 
-    public function userLendingsCount()
-    {
-        $user = Auth::user();
-        $lendings = Lending::with('user_c')
-        ->where('user_id','=', $user->id)
-        ->count();
-        return $lendings;
-    }
-
     public function userLendingsListExtra()
     {
         $user = Auth::user();
@@ -72,12 +63,21 @@ class LendingController extends Controller
         return $lendings;
     }
 
-    public function userLendingsCountExtra()
+    public function userLendingsCount()
     {
         $user = Auth::user();
         $lendings = Lending::with('user_c')
         ->where('user_id','=', $user->id)
         ->distinct('copy_id')
+        ->count();
+        return $lendings;
+    }
+
+    public function userLendingsCountExtra()
+    {
+        $user = Auth::user();
+        $lendings = Lending::with('user_c')
+        ->where('user_id','=', $user->id)
         ->count();
         return $lendings;
     }

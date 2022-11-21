@@ -35,15 +35,25 @@ Route::middleware( ['admin'])->group(function () {
     Route::delete('/api/books/{id}', [BookController::class, 'destroy']);
     //copies
     Route::apiResource('/api/copies', CopyController::class);
-    //queries
-    Route::get('/api/book_copies/{title}', [BookController::class, 'bookCopies']);
     //view - copy
     Route::get('/copy/new', [CopyController::class, 'newView']);
     Route::get('/copy/edit/{id}', [CopyController::class, 'editView']);
     Route::get('/copy/list', [CopyController::class, 'listView']);
+    //// selects
+    // Egy adott című könyv példányait listázd ki!
+    Route::get('/api/book_copies/{title}', [BookController::class, 'bookCopies']);
+    // Hány darab példány van egy adott című könyvből?
     Route::get('/api/book_copy_count/{title}', [CopyController::class, 'bookCopyCount']);
+    // Add meg a keménykötésű példányokat szerzővel és címmel! +
     Route::get('/api/hard_books/{isHard}', [BookController::class, 'hardBooks']);
+    // Bizonyos évben kiadott példányok névvel és címmel kiíratása.
     Route::get('/api/books_published_in/{year}', [BookController::class, 'booksPublishedIn']);
+    // Raktárban lévő példányok száma.
+    Route::get('/api/in_storage_count', [BookController::class, 'inStorageCount']);
+    // Bizonyos évben kiadott, bizonyos könyv raktárban lévő darabjainak a száma.
+    Route::get('/api/book_year_in_storage_count/{id}/{year}', [BookController::class, 'bookYearInStorageCount']);
+    // Adott könyvhöz (book_id) tartozó példányok kölcsönzési adatai
+    Route::get('/api/book_lendings/{id}', [BookController::class, 'bookLendings']);
 });
 
 //SIMPLE USER
@@ -53,10 +63,14 @@ Route::middleware(['auth.basic'])->group(function () {
     Route::apiResource('/api/users', UserController::class);
     Route::patch('/api/users/password/{id}', [UserController::class, 'updatePassword']);
     //queries
-    //user lendings
+    ////selects
+    // Az eddig kikölcsönzött könyvek listája a bejelentkezett felhasználó által 
     Route::get('/api/user_lendings', [LendingController::class, 'userLendingsList']);
+    // Az eddig kikölcsönzött könyvek listája a bejelentkezett felhasználó által
     Route::get('/api/user_lendings_extra', [LendingController::class, 'userLendingsListExtra']);
+    // Hányszor kölcsönzött ki könyvet eddig a bejelentkezett felhasználó
     Route::get('/api/user_lendings_count', [LendingController::class, 'userLendingsCount']);
+    // Hányszor kölcsönzött ki könyvet eddig a bejelentkezett felhasználó (vizsgáljuk, ha ugyanazt a könyvet többször is kikölcsönözte)?
     Route::get('/api/user_lendings_count_extra', [LendingController::class, 'userLendingsCountExtra']);
 });
 //csak a tesztelés miatt van "kint"

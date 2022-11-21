@@ -47,6 +47,7 @@ class BookController extends Controller
 
     public function hardBooks($isHard){
         $books = DB::table('copies as c')
+        ->join('books as b', 'b.book_id', '=', 'c.book_id')
         ->where('c.hardcovered', '=', ($isHard=='1'))
         ->get();
         return $books;
@@ -54,11 +55,34 @@ class BookController extends Controller
 
     public function booksPublishedIn($year){
         $books = DB::table('books as b')
-        ->where('b.book_id', 'in',
-            DB::table('copies as c')
-            ->where('c.publication', '=', $year)
-            ->get(['c.copy_id'])
-        )
+        ->join('copies as c', 'c.book_id', '=', 'b.book_id')
+        ->whereRaw("b.book_id in (select book_id from copies where publication = ${year})")
+        ->get();
+        return $books;
+    }
+
+    public function inStorageCount(){
+        $books = DB::table('copies as c')
+        ->where('c.status', '=', 0)
+        ->count();
+        return $books;
+    }
+
+    public function bookYearInStorageCount($id, $year){
+        $books = DB::table('books as b')
+        ->join('copies as c', 'c.book_id', '=', 'b.book_id')
+        ->where('b.book_id', '=', $id)
+        ->where('publication', '=', $year)
+        ->where('status', '=', '0')
+        ->count();
+        return $books;
+    }
+
+    public function bookLendings($id){
+        $books = DB::table('books as b')
+        ->join('copies as c', 'c.book_id', '=', 'b.book_id')
+        ->join('lendings as l', 'l.copy_id', '=', 'c.copy_id')
+        ->where('b.book_id', '=', $id)
         ->get();
         return $books;
     }
