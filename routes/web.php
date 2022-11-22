@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CopyController;
 use App\Http\Controllers\LendingController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -57,7 +58,7 @@ Route::middleware( ['admin'])->group(function () {
     // Raktárban lévő példányok száma.
     Route::get('/api/in_storage_count', [BookController::class, 'inStorageCount']);
     // Bizonyos évben kiadott, bizonyos könyv raktárban lévő darabjainak a száma.
-    
+    Route::get('/api/book_year_in_storage_count/{id}/{year}', [BookController::class, 'bookYearInStorageCount']);
     // Adott könyvhöz (book_id) tartozó példányok kölcsönzési adatai
     Route::get('/api/book_lendings/{id}', [BookController::class, 'bookLendings']);
 });
@@ -78,6 +79,10 @@ Route::middleware(['auth.basic'])->group(function () {
     Route::get('/api/user_lendings_count', [LendingController::class, 'userLendingsCount']);
     // Hányszor kölcsönzött ki könyvet eddig a bejelentkezett felhasználó (vizsgáljuk, ha ugyanazt a könyvet többször is kikölcsönözte)?
     Route::get('/api/user_lendings_count_extra', [LendingController::class, 'userLendingsCountExtra']);
+    // Hány darab előjegyzése van a bejelentkezett felhasználónak?
+    Route::get('/api/user_reservations_count', [ReservationController::class, 'userReservationsCount']);
+    // Csoportosítsd szerzőnként a könyveket (nem példányokat) a szerzők ABC szerinti növekvő sorrendjében!
+    Route::get('/api/books_by_author', [BookController::class, 'booksByAuthor']);
 });
 //csak a tesztelés miatt van "kint"
 Route::patch('/api/users/password/{id}', [UserController::class, 'updatePassword']);
@@ -90,7 +95,5 @@ Route::post('/api/lendings', [LendingController::class, 'store']);
 Route::delete('/api/lendings/{user_id}/{copy_id}/{start}', [LendingController::class, 'destroy']);
 
 Route::get('/api/llsql/{id}', [BookController::class, 'llSql']);
-
-Route::get('/api/book_year_in_storage_count/{id}/{year}', [BookController::class, 'bookYearInStorageCount']);
 
 require __DIR__.'/auth.php';

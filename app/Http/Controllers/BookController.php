@@ -105,4 +105,12 @@ class BookController extends Controller
         ));
         return $books;
     }
+
+    public function booksByAuthor()
+    {
+        $books = DB::table('books as b')
+        ->orderBy('b.author')
+        ->get();
+        return $books;
+    }
 }

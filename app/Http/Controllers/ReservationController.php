@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
@@ -41,5 +42,14 @@ class ReservationController extends Controller
         $reservation->start = $request->start;
         $reservation->message = $request->message;
         $reservation->save();
+    }
+
+    public function userReservationsCount()
+    {
+        $user = Auth::user();
+        $reservations = Reservation::with('user_c')
+        ->where('user_id','=', $user->id)
+        ->count();
+        return $reservations;
     }
 }
