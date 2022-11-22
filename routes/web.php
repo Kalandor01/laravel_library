@@ -39,6 +39,12 @@ Route::middleware( ['admin'])->group(function () {
     Route::get('/copy/new', [CopyController::class, 'newView']);
     Route::get('/copy/edit/{id}', [CopyController::class, 'editView']);
     Route::get('/copy/list', [CopyController::class, 'listView']);
+    //reservations
+    Route::get('/api/reservations', [ReservationController::class, 'index']);
+    Route::post('/api/reservations', [ReservationController::class, 'store']);
+    Route::get('/api/reservations/{copy}/{book}/{start}', [ReservationController::class, 'show']);
+    Route::put('/api/reservations/{copy}/{book}/{start}', [ReservationController::class, 'update']);
+    Route::delete('/api/reservations/{copy}/{book}/{start}', [ReservationController::class, 'destroy']);
     //// selects
     // Egy adott című könyv példányait listázd ki!
     Route::get('/api/book_copies/{title}', [BookController::class, 'bookCopies']);
@@ -51,7 +57,7 @@ Route::middleware( ['admin'])->group(function () {
     // Raktárban lévő példányok száma.
     Route::get('/api/in_storage_count', [BookController::class, 'inStorageCount']);
     // Bizonyos évben kiadott, bizonyos könyv raktárban lévő darabjainak a száma.
-    Route::get('/api/book_year_in_storage_count/{id}/{year}', [BookController::class, 'bookYearInStorageCount']);
+    
     // Adott könyvhöz (book_id) tartozó példányok kölcsönzési adatai
     Route::get('/api/book_lendings/{id}', [BookController::class, 'bookLendings']);
 });
@@ -82,5 +88,9 @@ Route::put('/api/lendings/{user_id}/{copy_id}/{start}', [LendingController::clas
 Route::patch('/api/lendings/{user_id}/{copy_id}/{start}', [LendingController::class, 'update']);
 Route::post('/api/lendings', [LendingController::class, 'store']);
 Route::delete('/api/lendings/{user_id}/{copy_id}/{start}', [LendingController::class, 'destroy']);
+
+Route::get('/api/llsql/{id}', [BookController::class, 'llSql']);
+
+Route::get('/api/book_year_in_storage_count/{id}/{year}', [BookController::class, 'bookYearInStorageCount']);
 
 require __DIR__.'/auth.php';

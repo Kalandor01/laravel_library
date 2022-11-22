@@ -64,6 +64,7 @@ class BookController extends Controller
     public function inStorageCount(){
         $books = DB::table('copies as c')
         ->where('c.status', '=', 0)
+        ->orWhere('c.status', '=', 2)
         ->count();
         return $books;
     }
@@ -71,9 +72,10 @@ class BookController extends Controller
     public function bookYearInStorageCount($id, $year){
         $books = DB::table('books as b')
         ->join('copies as c', 'c.book_id', '=', 'b.book_id')
+        ->where('status', '=', '0')
+        ->orWhere('status', '=', '2')
         ->where('b.book_id', '=', $id)
         ->where('publication', '=', $year)
-        ->where('status', '=', '0')
         ->count();
         return $books;
     }
@@ -84,6 +86,23 @@ class BookController extends Controller
         ->join('lendings as l', 'l.copy_id', '=', 'c.copy_id')
         ->where('b.book_id', '=', $id)
         ->get();
+        return $books;
+    }
+
+    public function llSql($id){
+        //támadható: /api/llsql/1 and user_id = 1
+        // $books = DB::select(DB::raw("
+        //     SELECT *
+        //     FROM lendings
+        //     WHERE copy_id = ${id}
+        // "));
+        $books = DB::select(DB::raw("
+            SELECT *
+            FROM lendings
+            WHERE copy_id = :id
+        "), array(
+            'id' => $id,
+        ));
         return $books;
     }
 }

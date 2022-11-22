@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class LendingController extends Controller
 {
-    //
     public function index(){
         $lendings =  Lending::all();
         return $lendings;
@@ -21,6 +20,7 @@ class LendingController extends Controller
         $lending = Lending::where('user_id', $user_id)->where('copy_id', $copy_id)->where('start', $start)->get();
         return $lending[0];
     }
+
     public function destroy($user_id, $copy_id, $start)
     {
         LendingController::show($user_id, $copy_id, $start)->delete();
@@ -32,6 +32,9 @@ class LendingController extends Controller
         $lending->user_id = $request->user_id;
         $lending->copy_id = $request->copy_id;
         $lending->start = $request->start;
+        $lending->end = $request->end;
+        $lending->extension = $request->extension;
+        $lending->notice = $request->notice;
         $lending->save();
     }
 
@@ -41,6 +44,9 @@ class LendingController extends Controller
         $lending->user_id = $request->user_id;
         $lending->copy_id = $request->copy_id;
         $lending->start = $request->start;
+        $lending->end = $request->end;
+        $lending->extension = $request->extension;
+        $lending->notice = $request->notice;
         $lending->save();
     }
 
