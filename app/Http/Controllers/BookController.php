@@ -113,4 +113,22 @@ class BookController extends Controller
         ->get();
         return $books;
     }
+
+    public function bookWithMinAuthors($num)
+    {
+        $books = DB::table('books')
+        ->selectRaw('author, count(*)')
+        ->groupBy('author')
+        ->having('count(*)', '>=', $num)
+        ->get();
+        return $books;
+    }
+
+    public function bookSearchAuthors($letter)
+    {
+        $books = DB::table('books')
+        ->whereRaw("author like '${letter}%'")
+        ->get();
+        return $books;
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ReservationController extends Controller
 {
@@ -50,6 +51,16 @@ class ReservationController extends Controller
         $reservations = Reservation::with('user_c')
         ->where('user_id','=', $user->id)
         ->count();
+        return $reservations;
+    }
+    
+    public function userOldReservations($day)
+    {
+        $user = Auth::user();
+        $reservations = DB::table('reservations as r')
+        ->where('r.user_id','=', $user->id)
+        ->whereRaw("DATEDIFF(CURRENT_DATE, r.start) > ${day}")
+        ->get();
         return $reservations;
     }
 }

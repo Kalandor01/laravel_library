@@ -7,6 +7,7 @@ use App\Models\Lending;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LendingController extends Controller
 {
@@ -50,6 +51,16 @@ class LendingController extends Controller
         $lending->save();
     }
 
+    //view-k:
+    public function newView()
+    {
+        //új rekord(ok) rögzítése
+        $users = User::all();
+        $copies = Copy::all();
+        return view('lending.new', ['users' => $users, 'copies' => $copies]);
+    }
+
+    //selects
     public function userLendingsList()
     {
         $user = Auth::user();	//bejelentkezett felhasználó
@@ -88,12 +99,28 @@ class LendingController extends Controller
         return $lendings;
     }
 
-    //view-k:
-    public function newView()
+    public function userLendedNum($num)
     {
-        //új rekord(ok) rögzítése
-        $users = User::all();
-        $copies = Copy::all();
-        return view('lending.new', ['users' => $users, 'copies' => $copies]);
+        $user = Auth::user();
+        $lendings = DB::table('lendings as l')
+        ->selectRaw('l.copy_id, count(1)')
+        ->where('l.user_id', '=', $user->id)
+        ->groupBy('l.copy_id')
+        ->having('count(1)', '>=', $num)
+        ->get();
+        return $lendings;
+    }
+
+    public function legthenLended($copy_id, $start)
+    {
+        $user = Auth::user();
+        $book = DB::table('lendings as l')
+        ->select('c.book_id')
+        ->join('copies c', 'l.copy_id', '=', 'c.copy_id')
+        ->where('l.user_id', '=', $user->id)
+        ->where('l.copy_id', '=', $copy_id)
+        ->where('l.start', '=', $start)
+        ->get();
+        return $book;
     }
 }
