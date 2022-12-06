@@ -54,7 +54,7 @@ Route::middleware( ['admin'])->group(function () {
     Route::delete('/api/lendings/{user_id}/{copy_id}/{start}', [LendingController::class, 'destroy']);
     //deletes
     Route::delete('/api/delete_old_reservations', [ReservationController::class, 'deleteOldReservations']);
-    
+    Route::delete('/api/delete_non_lended_users', [UserController::class, 'deleteNolendUsers']);
 });
 
 // LIBRARIAN
@@ -120,7 +120,6 @@ Route::middleware(['auth.basic'])->group(function () {
 
 
 });
-Route::delete('/api/delete_non_lended_users', [UserController::class, 'deleteNolendUsers']);
 //csak a tesztelés miatt van "kint"
 Route::patch('/api/users/password/{id}', [UserController::class, 'updatePassword']);
 Route::apiResource('/api/copies', CopyController::class);
