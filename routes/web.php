@@ -5,6 +5,9 @@ use App\Http\Controllers\CopyController;
 use App\Http\Controllers\LendingController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
+use App\Mail\DemoMail;
+use App\Http\Controllers\MailController;
+use App\Http\Controllers\FileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -49,6 +52,8 @@ Route::middleware( ['admin'])->group(function () {
     Route::patch('/api/lendings/{user_id}/{copy_id}/{start}', [LendingController::class, 'update']);
     Route::post('/api/lendings', [LendingController::class, 'store']);
     Route::delete('/api/lendings/{user_id}/{copy_id}/{start}', [LendingController::class, 'destroy']);
+    //deletes
+    Route::delete('/api/delete_old_reservations', [ReservationController::class, 'deleteOldReservations']);
 });
 
 // LIBRARIAN
@@ -103,6 +108,16 @@ Route::middleware(['auth.basic'])->group(function () {
     Route::get('/api/user_lended_num/{num}', [LendingController::class, 'userLendedNum']);
     // Hosszabbítsd meg a könyvet, ha nincs rá előjegyzés!
     Route::patch('/api/legthen_lended/{copy_id}/{start}', [LendingController::class, 'legthenLended']);
+    // jelenleg nálam levő könyvek
+    Route::get('/api/currently_reserved_books', [ReservationController::class, 'currentlyReservedBooks']);
+
+    //mail
+    Route::get('/send-mail/{email}/{num}', [MailController::class, 'index']);
+    //file
+    Route::get('file_upload', [FileController::class, 'index']);
+    Route::post('file_upload', [FileController::class, 'store'])->name('file.store');
+
+
 });
 //csak a tesztelés miatt van "kint"
 Route::patch('/api/users/password/{id}', [UserController::class, 'updatePassword']);

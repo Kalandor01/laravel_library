@@ -63,4 +63,25 @@ class ReservationController extends Controller
         ->get();
         return $reservations;
     }
+
+    public function deleteOldReservations()
+    {
+        $reservations = DB::table('reservations')
+        ->where('status', 1)
+        ->delete();
+        return $reservations;
+    }
+
+    public function currentlyReservedBooks()
+    {
+        $user = Auth::user();
+        $reservations = DB::table('lendings as l')
+        ->select('b.author', 'b.title')
+        ->join('copies as c', 'c.copy_id', '=', 'l.copy_id')
+        ->join('books as b', 'b.book_id', '=', 'c.book_id')
+        ->where('l.user_id', $user->id)
+        ->where('l.end', null)
+        ->get();
+        return $reservations;
+    }
 }

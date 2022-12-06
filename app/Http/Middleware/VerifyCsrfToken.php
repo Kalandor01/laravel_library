@@ -21,6 +21,7 @@ class VerifyCsrfToken extends Middleware
         '/api/books/*',
         '/api/users/password/*',
         'api/lendings',
-        'api/lendings/*/*/*'
+        'api/lendings/*/*/*',
+        'api/delete_old_reservations'
     ];
 }
