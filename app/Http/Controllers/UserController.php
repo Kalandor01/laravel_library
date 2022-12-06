@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -56,7 +57,7 @@ class UserController extends Controller
         $user->email = $request->email;
         //$user->password = Hash::make($request->password);
         $user->permission = $request->permission;
-        $User->save();
+        $user->save();
 
     }
 
@@ -86,5 +87,14 @@ class UserController extends Controller
         ]);
 
         return response()->json(["user" => $user]);
+    }
+
+    public function deleteNolendUsers()
+    {
+        $users = DB::table('users as u')
+        ->join('lendings as l', 'l.user_id', 'u.id')
+        ->whereRaw('u.id not in (select user_id from lendings)')
+        ->delete();
+        return $users;
     }
 }

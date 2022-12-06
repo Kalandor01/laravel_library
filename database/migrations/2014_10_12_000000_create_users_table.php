@@ -29,7 +29,7 @@ return new class extends Migration
 
         //rekordok feltöltése
         User::create(['name'=>'store', 'email'=>'store@gmail.com', 'password'=> Hash::make('St123456'), 'permission'=> 0]);
-        User::create(['name'=>'store', 'email'=>'libra@gmail.com', 'password'=> Hash::make('Li123456'), 'permission'=> 2]);
+        User::create(['name'=>'librarian', 'email'=>'libra@gmail.com', 'password'=> Hash::make('Li123456'), 'permission'=> 2]);
         User::create(['name'=>'Marcsi', 'email'=>'student1@gmail.com', 'password'=> Hash::make('Aa123456')]);
         User::create(['name'=>'Iván', 'email'=>'student2@gmail.com', 'password'=> Hash::make('Aa123456')]);
     }
