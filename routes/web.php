@@ -111,6 +111,8 @@ Route::middleware(['auth.basic'])->group(function () {
     Route::patch('/api/legthen_lended/{copy_id}/{start}', [LendingController::class, 'legthenLended']);
     // jelenleg nálam levő könyvek
     Route::get('/api/currently_reserved_books', [ReservationController::class, 'currentlyReservedBooks']);
+    // bring back book
+    Route::patch('/api/bring_back/{copy_id}/{start}', [LendingController::class, 'bringBack']);
 
     //mail
     Route::get('/send-mail/{email}/{num}', [MailController::class, 'index']);
